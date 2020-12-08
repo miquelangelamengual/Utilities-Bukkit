@@ -59,6 +59,10 @@ public class Main extends JavaPlugin {
     }
 
     public CommandFramework getCommandFramework() {
-        return getCommandFramework();
+        return commandFramework;
+    }
+
+    public void setCommandFramework(CommandFramework commandFramework) {
+        this.commandFramework = commandFramework;
     }
 }
