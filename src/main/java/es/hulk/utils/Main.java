@@ -20,7 +20,8 @@ public class Main extends JavaPlugin {
 
     @Override
     public void onEnable() {
-
+        
+        commandFramework = new CommandFramework(this);
         instance = this;
         this.saveDefaultConfig();
 
