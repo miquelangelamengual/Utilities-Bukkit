@@ -1,7 +1,10 @@
 package es.hulk.utils;
 
 import es.hulk.utils.commands.GmCMD;
+import es.hulk.utils.utils.FileConfig;
 import es.hulk.utils.utils.command.CommandFramework;
+import lombok.Getter;
+import lombok.Setter;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -10,13 +13,14 @@ import org.bukkit.plugin.java.JavaPlugin;
 import java.io.File;
 import java.io.IOException;
 
+@Getter
+@Setter
 public class Main extends JavaPlugin {
 
     private CommandFramework commandFramework;
     private static Main instance;
 
-    private File testFile;
-    private FileConfiguration tesConfig;
+    private FileConfig mainConfig;
 
     @Override
     public void onEnable() {
@@ -26,33 +30,19 @@ public class Main extends JavaPlugin {
         this.saveDefaultConfig();
 
         registerCMDs();
-
+        loadConfig();
     }
 
     @Override
     public void onDisable() {
     }
 
+    public void loadConfig() {
+        mainConfig = new FileConfig(this, "config.yml");
+    }
+
     public void registerCMDs() {
         commandFramework.registerCommands(new GmCMD());
-    }
-
-    public FileConfiguration getTesConfig() {
-        return this.tesConfig;
-    }
-
-    public void createScoreboardConfig() {
-        testFile = new File(getDataFolder(), "test.yml");
-        if (!testFile.exists()) {
-            testFile.getParentFile().mkdirs();
-            saveResource("test.yml", false);
-        }
-        tesConfig = new YamlConfiguration();
-        try {
-            tesConfig.load(testFile);
-        } catch (IOException | InvalidConfigurationException e) {
-            e.printStackTrace();
-        }
     }
 
     public static Main getInstance() {
@@ -65,5 +55,9 @@ public class Main extends JavaPlugin {
 
     public void setCommandFramework(CommandFramework commandFramework) {
         this.commandFramework = commandFramework;
+    }
+
+    public static Main get() {
+        return getPlugin(Main.class);
     }
 }
